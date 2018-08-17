@@ -83,7 +83,10 @@ class Demo(object):
                               'question:0': [q],
                               'context_char:0': [ch],
                               'question_char:0': [qh]}
-                        yp1,yp2 = sess.run([model.yp1, model.yp2], feed_dict = fd)
+                        yp1,yp2, logits1, logits2 = sess.run([model.yp1, model.yp2, model.logits1, model.logits2], feed_dict = fd)
+                        score1 = logits1[0][yp1[0]] 
+                        score2 = logits2[0][yp2[0]]
+                        print("SV Confidence: ", 1/(1+2.72**(-score1)), "EV Confidence: ", 1/(1+2.72**(-score2)))
                         yp2[0] += 1
                         response = " ".join(context[yp1[0]:yp2[0]])
                         query = []

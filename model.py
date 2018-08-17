@@ -165,6 +165,9 @@ class Model(object):
 
             logits1, logits2 = [l for l in self.logits]
 
+            self.logits1 = logits1
+            self.logits2 = logits2
+
             outer = tf.matmul(tf.expand_dims(tf.nn.softmax(logits1), axis=2),
                               tf.expand_dims(tf.nn.softmax(logits2), axis=1))
             outer = tf.matrix_band_part(outer, 0, config.ans_limit)
