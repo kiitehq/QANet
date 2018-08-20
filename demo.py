@@ -10,6 +10,7 @@ import numpy as np
 
 from prepro import convert_to_features, word_tokenize
 from time import sleep
+import math
 
 '''
 This file is taken and modified from R-Net by Minsangkim142
@@ -84,9 +85,11 @@ class Demo(object):
                               'context_char:0': [ch],
                               'question_char:0': [qh]}
                         yp1,yp2, logits1, logits2 = sess.run([model.yp1, model.yp2, model.logits1, model.logits2], feed_dict = fd)
-                        score1 = logits1[0][yp1[0]] 
-                        score2 = logits2[0][yp2[0]]
-                        print("SV Confidence: ", 1/(1+2.72**(-score1)), "EV Confidence: ", 1/(1+2.72**(-score2)))
+                        log_prob1 = logits1[0][yp1[0]] 
+                        log_prob2 = logits2[0][yp2[0]]
+                        score1 = 1/(1+math.exp(-log_prob1))
+                        score2 = 1/(1+math.exp(-log_prob2))
+                        print("SV Confidence: ", score1, "EV Confidence: ", score2)
                         yp2[0] += 1
                         response = " ".join(context[yp1[0]:yp2[0]])
                         query = []
